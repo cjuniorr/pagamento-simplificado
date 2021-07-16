@@ -12,5 +12,4 @@ class SeriesController {
             "Grey's Anatomy"
         ];
     }
-
 }
