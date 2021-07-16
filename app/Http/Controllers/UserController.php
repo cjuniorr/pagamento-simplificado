@@ -11,14 +11,20 @@ class UserController{
     }
 
     public function Add(Request $request){
-
-        // var_dump($request->fullName);
-        // exit();
-
         return response()
             ->json(User::create(['fullname' => $request->fullname,
                                  'cpf' => $request-> cpf,
                                  'email' => $request->email,
                                  'usertype' => $request->usertype]), 201);
+    }
+
+    public function Get(int $id){
+        $user = User::find($id);
+
+        if(is_null($user)){
+            return response()->json('', 204);
+        }
+
+        return response()->json($user);
     }
 }
