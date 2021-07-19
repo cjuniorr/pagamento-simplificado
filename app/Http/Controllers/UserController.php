@@ -27,4 +27,16 @@ class UserController{
 
         return response()->json($user);
     }
+
+    public function Remove (int $id) {
+        $userQuantityDeleted = User::destroy($id);
+
+        if($userQuantityDeleted === 0){
+            return response()->json([
+                'erro' =>'Usuário não encontrado'
+            ], 404);
+        }
+
+        return response()->json('', 204);
+    }
 }
