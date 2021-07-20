@@ -4,10 +4,21 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use App\Repositories\IUserRepository;
 
 class UserController{
+
+    private $userRepository;
+
+    function __construct(IUserRepository $userRepository)
+    {
+        $this->userRepository = $userRepository;
+    }
+
+
     public function GetAll(){
-        return User::all();
+        // return User::all();
+        return $this->userRepository->GetAll();
     }
 
     public function Add(Request $request){

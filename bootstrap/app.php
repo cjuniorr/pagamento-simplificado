@@ -8,6 +8,9 @@ require_once __DIR__.'/../vendor/autoload.php';
 
 date_default_timezone_set(env('APP_TIMEZONE', 'UTC'));
 
+use App\Repositories\IUserRepository;
+use App\Repositories\UserRepository;
+
 /*
 |--------------------------------------------------------------------------
 | Create The Application
@@ -37,6 +40,8 @@ $app->withEloquent();
 | your own bindings here if you like or you can make another file.
 |
 */
+
+$app->bind(IUserRepository::class, UserRepository::class);
 
 $app->singleton(
     Illuminate\Contracts\Debug\ExceptionHandler::class,
