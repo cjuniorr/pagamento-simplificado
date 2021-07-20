@@ -10,6 +10,8 @@ date_default_timezone_set(env('APP_TIMEZONE', 'UTC'));
 
 use App\Repositories\IUserRepository;
 use App\Repositories\UserRepository;
+use App\Repositories\ITransactionRepository;
+use App\Repositories\TransactionRepository;
 
 /*
 |--------------------------------------------------------------------------
@@ -42,6 +44,7 @@ $app->withEloquent();
 */
 
 $app->bind(IUserRepository::class, UserRepository::class);
+$app->bind(ITransactionRepository::class, TransactionRepository::class);
 
 $app->singleton(
     Illuminate\Contracts\Debug\ExceptionHandler::class,

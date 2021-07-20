@@ -10,7 +10,8 @@ class UserRepository implements IUserRepository {
         User::create(['fullname' => $request->fullname,
                                  'cpf' => $request-> cpf,
                                  'email' => $request->email,
-                                 'usertype' => $request->usertype]);
+                                 'usertype' => $request->usertype,
+                                 'balance' => 0]);
     }
 
     public function GetAll(){
