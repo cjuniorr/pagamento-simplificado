@@ -26,4 +26,9 @@ $router->group(['prefix' => '/api'], function($router) {
     $router->get('user/{id}', 'UserController@Get');
     $router->delete('user/{id}', 'UserController@Remove');
 
+    $router->get('transaction', 'TransactionController@GetAll');
+    $router->post('transaction', 'TransactionController@Add');
+    $router->get('transaction', 'TransactionController@GetAll');
+    $router->get('transaction/{id}', 'TransactionController@Get');
+    $router->delete('transaction/{id}', 'TransactionController@Remove');
 });
