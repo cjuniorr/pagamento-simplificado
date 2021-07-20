@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
 use Illuminate\Http\Request;
 use App\Repositories\IUserRepository;
 
@@ -17,20 +16,15 @@ class UserController{
 
 
     public function GetAll(){
-        // return User::all();
         return $this->userRepository->GetAll();
     }
 
     public function Add(Request $request){
-        return response()
-            ->json(User::create(['fullname' => $request->fullname,
-                                 'cpf' => $request-> cpf,
-                                 'email' => $request->email,
-                                 'usertype' => $request->usertype]), 201);
+        return response()->json($this->userRepository->Add($request), 201);
     }
 
     public function Get(int $id){
-        $user = User::find($id);
+        $user = $this->userRepository->Get($id);
 
         if(is_null($user)){
             return response()->json('', 204);
@@ -40,7 +34,7 @@ class UserController{
     }
 
     public function Remove (int $id) {
-        $userQuantityDeleted = User::destroy($id);
+        $userQuantityDeleted = $this->userRepository->Remove($id);
 
         if($userQuantityDeleted === 0){
             return response()->json([
