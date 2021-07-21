@@ -12,6 +12,10 @@ use App\Repositories\IUserRepository;
 use App\Repositories\UserRepository;
 use App\Repositories\ITransactionRepository;
 use App\Repositories\TransactionRepository;
+use App\Services\AuthorizationService;
+use App\Services\IAuthorizationService;
+use App\Services\INotificationService;
+use App\Services\NotificationService;
 
 /*
 |--------------------------------------------------------------------------
@@ -45,6 +49,9 @@ $app->withEloquent();
 
 $app->bind(IUserRepository::class, UserRepository::class);
 $app->bind(ITransactionRepository::class, TransactionRepository::class);
+$app->bind(IAuthorizationService::class, AuthorizationService::class);
+$app->bind(INotificationService::class, NotificationService::class);
+
 
 $app->singleton(
     Illuminate\Contracts\Debug\ExceptionHandler::class,

@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Repositories\ITransactionRepository;
 use App\Repositories\IUserRepository;
+use App\Services\IAuthorizationService;
+use App\Services\INotificationService;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
@@ -13,11 +15,16 @@ class TransactionController extends Controller {
 
     private $transactionRepository;
     private $userRepository;
+    private $authorizationService;
+    private $notificationService;
 
-    function __construct(ITransactionRepository $transactionRepository, IUserRepository $userRepository)
+    function __construct(ITransactionRepository $transactionRepository, IUserRepository $userRepository,
+                         IAuthorizationService $authorizationService)
     {
         $this->transactionRepository = $transactionRepository;
         $this->userRepository = $userRepository;
+        $this->authorizationService = $authorizationService;
+        // $this->notificationService = $notificationService;
     }
 
 
@@ -29,8 +36,8 @@ class TransactionController extends Controller {
         try{ 
 
             $payer = $this->userRepository->Get($request->payerid);
-
     
+            
             if((int)$payer->balance < $request->value) {
                 return response()->json(['erro' => 'O usuário não tem saldo suficiente'], 404);
             }
@@ -38,10 +45,10 @@ class TransactionController extends Controller {
             if($payer->usertype === 'lojista') {
                 return response()->json(['erro' => 'Lojistas não podem fazer a transação.'], 404);
              }
-
              
-            $autorizationResponse = Http::withOptions(['verify' => false])->get('https://run.mocky.io/v3/8fafdd68-a090-496f-8c9a-3442cf30dae6');
-                
+             $autorizationResponse = $this->authorizationService->Authorize();
+
+
             if($autorizationResponse->failed()){ 
                 Log::warning('A autorização não foi autorizada.');
                 return response()->json(['erro' => 'A transação não foi autorizada.'], 403);
@@ -56,13 +63,12 @@ class TransactionController extends Controller {
                 return response()->json(['erro' => 'Não foi possível notificar o beneficiário'], 404);
             }
 
-            return response()->json(['Transação realizada com sucesso.'], 201);
+            return response()->json(['message'=> 'Transação realizada com sucesso.'], 201);
 
         } catch(Exception $e) {
             Log::error('Ocorreu um erro durante do registro da transação');
             throw new Exception('Ocorreu um erro durante do registro da transação', $e);
         }
-
     }
 
     public function Get(int $id){
