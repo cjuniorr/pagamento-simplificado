@@ -3,23 +3,29 @@
 namespace App\Http\Controllers;
 
 use App\Models\Transaction;
+use App\Repositories\ITransactionRepository;
 use Illuminate\Http\Request;
 
-class TransactionController {
+class TransactionController extends Controller {
+
+    private $transactionRepository;
+
+    function __construct(ITransactionRepository $transactionRepository)
+    {
+        $this->transactionRepository = $transactionRepository;
+    }
+
 
     public function GetAll(){
-        return Transaction::all();
+        return $this->transactionRepository->GetAll();
     }
 
     public function Add(Request $request){
-        return response()
-            ->json(Transaction::create(['payeeid' => $request->payeeid,
-                                'payerid' => $request-> payerid,
-                                'value' => $request->value]), 201);
+        return response()->json($this->transactionRepository->Add($request), 201);
     }
 
     public function Get(int $id){
-        $transaction = Transaction::find($id);
+        $transaction = $this->transactionRepository->Get($id);
 
         if(is_null($transaction)){
             return response()->json('', 204);
@@ -29,7 +35,7 @@ class TransactionController {
     }
 
     public function Remove (int $id) {
-        $transactionQuantityDeleted = Transaction::destroy($id);
+        $transactionQuantityDeleted = $this->transactionRepository->Remove($id);
 
         if($transactionQuantityDeleted === 0){
             return response()->json([

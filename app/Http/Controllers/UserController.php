@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Repositories\IUserRepository;
 
-class UserController{
+class UserController extends Controller {
 
     private $userRepository;
 
@@ -14,8 +14,7 @@ class UserController{
         $this->userRepository = $userRepository;
     }
 
-
-    public function GetAll(){
+    public function GetAll() {
         return $this->userRepository->GetAll();
     }
 
