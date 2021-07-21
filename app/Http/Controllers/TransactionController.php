@@ -7,6 +7,7 @@ use App\Repositories\IUserRepository;
 use App\Services\IAuthorizationService;
 use App\Services\INotificationService;
 use App\Validation\UserBalanceValidator;
+use App\Validation\UserTypeValidator;
 use App\Validation\Validator;
 use Exception;
 use Illuminate\Http\Request;
@@ -37,10 +38,18 @@ class TransactionController extends Controller {
     public function Add(Request $request){
         try{ 
 
-            $payer = $this->userRepository->Get($request->payerid);
+            $validateBalance = new UserBalanceValidator($this->userRepository);
+            $validateUserType = new UserTypeValidator($this->userRepository);
 
-            // $validation = new Validator(new UserBalanceValidator().Validate($request));
-    
+            $validateBalance->setNext($validateUserType);
+            // $erros = $validateBalance->handle($request)->GetErrors();
+
+            // var_dump($erros);
+            // $validation->handle($request);
+            // var_dump($validation);
+            exit();
+
+            $payer = $this->userRepository->Get($request->payerid);
             
             if((int)$payer->balance < $request->value) {
                 return response()->json(['erro' => 'O usuário não tem saldo suficiente'], 404);

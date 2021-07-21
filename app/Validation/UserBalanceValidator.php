@@ -3,28 +3,25 @@
 namespace App\Validation;
 
 use App\Repositories\IUserRepository;
-use Illuminate\Http\Client\Request;
+use Illuminate\Http\Request;
 
 class UserBalanceValidator extends Validator {
 
     private $userRepository;
-    private $next;
 
-    public function __construct(IUserRepository $userRepository, Validator $next)
+    public function __construct(IUserRepository $userRepository)
     {
         $this->userRepository = $userRepository;
-        $this->next =$next;
     }
 
-    public function Validate(Request $request){
-
+    public function handle(Request $request): ?Request {
+        echo 'passou pelo balance validator | ';
         $payer = $this->userRepository->Get($request->payerid);
 
         if((int)$payer->balance < $request->value) {
-            $this->next->AddError('O usuário não tem saldo suficiente');
-            // return response()->json(['erro' => 'O usuário não tem saldo suficiente'], 404);
+            parent::AddError('O usuário não tem saldo suficiente');
         }
 
-        return $this->next->Validate($request);
+        return parent::handle($request);
     }
 }

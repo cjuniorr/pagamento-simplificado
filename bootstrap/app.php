@@ -16,6 +16,8 @@ use App\Services\AuthorizationService;
 use App\Services\IAuthorizationService;
 use App\Services\INotificationService;
 use App\Services\NotificationService;
+use App\Validation\IValidator;
+use App\Validation\Validator;
 
 /*
 |--------------------------------------------------------------------------
@@ -51,6 +53,7 @@ $app->bind(IUserRepository::class, UserRepository::class);
 $app->bind(ITransactionRepository::class, TransactionRepository::class);
 $app->bind(IAuthorizationService::class, AuthorizationService::class);
 $app->bind(INotificationService::class, NotificationService::class);
+$app->bind(IValidator::class, Validator::class);
 
 
 $app->singleton(

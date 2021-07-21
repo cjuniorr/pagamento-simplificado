@@ -2,18 +2,35 @@
 
 namespace App\Validation;
 
-use Illuminate\Http\Client\Request;
+use Illuminate\Http\Request;
 
-abstract class Validator {
+abstract class Validator implements IValidator {
 
-    protected Validator $next;
+    private $nextHandler;
     public $errors = array();
 
-    public function __construct(Validator $next){
-        $this->next = $next;
+    public function setNext(Validator $handler): Validator {
+
+        $this->nextHandler = $handler;
+
+        return $handler;
     }
 
-    abstract public function Validate(Request $request);
+    public function handle(Request $request): ?Request {
+        echo 'passando no handle abstract | ';
+
+        if($this->nextHandler) {
+            echo 'executando handler | ';
+            return $this->nextHandler->handle($request);
+        }
+
+        echo 'saindo do absctract null';
+        return null;
+    }
+
+    public function GetErrors(){
+        return $this->errors;
+    }
 
     public function AddError($errorMessage){
         $currentErrors = $this->errors;

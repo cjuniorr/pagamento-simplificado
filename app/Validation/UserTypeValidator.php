@@ -3,9 +3,10 @@
 namespace App\Validation;
 
 use App\Repositories\IUserRepository;
-use Illuminate\Http\Client\Request;
+use Illuminate\Http\Request;
 
 class UserTypeValidator extends Validator {
+
     private $userRepository;
 
     function __construct(IUserRepository $userRepository)
@@ -13,15 +14,15 @@ class UserTypeValidator extends Validator {
         $this->userRepository = $userRepository;
     }
 
-    public function Validate (Request $request) {
-
+    public function handle(Request $request): ?Request {
         $payer = $this->userRepository->Get($request->payerid);
+        
+        echo 'passou pelo user validator | ';
 
         if($payer->usertype === 'lojista') {
-            $this->next->AddError('Lojistas não podem fazer a transação.');
-            // return response()->json(['erro' => 'Lojistas não podem fazer a transação.'], 404);
-         }
+            parent::AddError('Lojistas não podem fazer a transação.');
+        }
 
-         return $this->next->Validate($request);
+        return parent::handle($request);
     }
 }
