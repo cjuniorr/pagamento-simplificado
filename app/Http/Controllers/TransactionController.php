@@ -2,17 +2,19 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Transaction;
 use App\Repositories\ITransactionRepository;
+use App\Repositories\IUserRepository;
 use Illuminate\Http\Request;
 
 class TransactionController extends Controller {
 
     private $transactionRepository;
+    private $userRepository;
 
-    function __construct(ITransactionRepository $transactionRepository)
+    function __construct(ITransactionRepository $transactionRepository, IUserRepository $userRepository)
     {
         $this->transactionRepository = $transactionRepository;
+        $this->userRepository = $userRepository;
     }
 
 
@@ -21,6 +23,16 @@ class TransactionController extends Controller {
     }
 
     public function Add(Request $request){
+        $payer = $this->userRepository->Get($request->payerid);
+        
+        if((int)$payer->balance < $request->value) {
+            return response()->json(['erro' => 'O usuário não tem saldo suficiente'], 403);
+        }
+
+        if($payer->usertype === 'lojista') {
+            return response()->json(['erro' => 'Lojistas não podem fazer a transação.'], 403);
+         }
+
         return response()->json($this->transactionRepository->Add($request), 201);
     }
 

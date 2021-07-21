@@ -18,8 +18,8 @@ class CreateUsersTable extends Migration
             $table->string('fullname')->nullable();
             $table->string('cpf')->unique();
             $table->string('email')->unique();
-            $table->integer('usertype');
-            $table->integer('balance')->nullable();
+            $table->string('usertype');
+            $table->bigInteger('balance')->nullable();
         });
     }
 

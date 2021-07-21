@@ -11,7 +11,7 @@ class UserRepository implements IUserRepository {
                                  'cpf' => $request-> cpf,
                                  'email' => $request->email,
                                  'usertype' => $request->usertype,
-                                 'balance' => 0]);
+                                 'balance' =>1000]);
     }
 
     public function GetAll(){
