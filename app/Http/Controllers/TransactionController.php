@@ -6,6 +6,8 @@ use App\Repositories\ITransactionRepository;
 use App\Repositories\IUserRepository;
 use App\Services\IAuthorizationService;
 use App\Services\INotificationService;
+use App\Validation\UserBalanceValidator;
+use App\Validation\Validator;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
@@ -36,6 +38,8 @@ class TransactionController extends Controller {
         try{ 
 
             $payer = $this->userRepository->Get($request->payerid);
+
+            // $validation = new Validator(new UserBalanceValidator().Validate($request));
     
             
             if((int)$payer->balance < $request->value) {
