@@ -8,7 +8,6 @@ use App\Services\IAuthorizationService;
 use App\Services\INotificationService;
 use App\Validation\UserBalanceValidator;
 use App\Validation\UserTypeValidator;
-use App\Validation\Validator;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
@@ -42,13 +41,18 @@ class TransactionController extends Controller {
             $validateUserType = new UserTypeValidator($this->userRepository);
 
             $validateBalance->setNext($validateUserType);
-            // $erros = $validateBalance->handle($request)->GetErrors();
+            $validateBalance->handle($request);
+            $errors = $validateBalance->GetErrors();
 
-            // var_dump($erros);
-            // $validation->handle($request);
-            // var_dump($validation);
+            // var_dump($errors);
+            // exit();
+
+            if(!empty($errors)){
+                Log::warning('Ocorram erros durante a validação.');
+                return response()->json(['errors' => $errors], 404);
+            }
+
             exit();
-
             $payer = $this->userRepository->Get($request->payerid);
             
             if((int)$payer->balance < $request->value) {
@@ -60,7 +64,6 @@ class TransactionController extends Controller {
              }
              
              $autorizationResponse = $this->authorizationService->Authorize();
-
 
             if($autorizationResponse->failed()){ 
                 Log::warning('A autorização não foi autorizada.');

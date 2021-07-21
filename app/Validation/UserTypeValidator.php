@@ -17,9 +17,9 @@ class UserTypeValidator extends Validator {
     public function handle(Request $request): ?Request {
         $payer = $this->userRepository->Get($request->payerid);
         
-        echo 'passou pelo user validator | ';
-
+        echo 'validando usuario | ';
         if($payer->usertype === 'lojista') {
+            echo 'Lojistas não podem fazer a transação. | ';
             parent::AddError('Lojistas não podem fazer a transação.');
         }
 

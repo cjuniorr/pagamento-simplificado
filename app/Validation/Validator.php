@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 abstract class Validator implements IValidator {
 
     private $nextHandler;
-    public $errors = array();
+    protected $errors = [];
 
     public function setNext(Validator $handler): Validator {
 
@@ -20,11 +20,10 @@ abstract class Validator implements IValidator {
         echo 'passando no handle abstract | ';
 
         if($this->nextHandler) {
-            echo 'executando handler | ';
             return $this->nextHandler->handle($request);
         }
 
-        echo 'saindo do absctract null';
+        echo 'saindo do absctract null | ';
         return null;
     }
 
@@ -32,8 +31,11 @@ abstract class Validator implements IValidator {
         return $this->errors;
     }
 
-    public function AddError($errorMessage){
-        $currentErrors = $this->errors;
-        $this->errors = array_push($errorMessage, $currentErrors);
+    public function AddError($newErrorMessage){
+
+        echo 'adicionou um erro | ';
+        // $currentErrors = $this->errors;
+        // $this->errors = array_push($errorMessage, $currentErrors);
+        array_push($this->errors, $newErrorMessage);
     }
 }

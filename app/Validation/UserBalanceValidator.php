@@ -15,10 +15,11 @@ class UserBalanceValidator extends Validator {
     }
 
     public function handle(Request $request): ?Request {
-        echo 'passou pelo balance validator | ';
         $payer = $this->userRepository->Get($request->payerid);
-
+        
+        echo 'validando saldo | ';
         if((int)$payer->balance < $request->value) {
+            echo 'O usuário não tem saldo suficiente | ';
             parent::AddError('O usuário não tem saldo suficiente');
         }
 
