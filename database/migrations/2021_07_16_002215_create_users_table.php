@@ -19,7 +19,7 @@ class CreateUsersTable extends Migration
             $table->string('cpf')->unique();
             $table->string('email')->unique();
             $table->string('usertype');
-            $table->bigInteger('balance')->nullable();
+            $table->integer('balance');
         });
     }
 
