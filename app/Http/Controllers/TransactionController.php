@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Transaction;
+use App\Models\TransactionValidator;
 use App\Repositories\ITransactionRepository;
 use App\Repositories\IUserRepository;
 use App\Services\IAuthorizationService;
@@ -29,7 +31,6 @@ class TransactionController extends Controller {
         // $this->notificationService = $notificationService;
     }
 
-
     public function GetAll(){
         return $this->transactionRepository->GetAll();
     }
@@ -44,25 +45,11 @@ class TransactionController extends Controller {
             $validateBalance->handle($request);
             $errors = $validateBalance->GetErrors();
 
-            // var_dump($errors);
-            // exit();
-
             if(!empty($errors)){
                 Log::warning('Ocorram erros durante a validação.');
-                return response()->json(['errors' => $errors], 404);
+                return response()->json(['errors' => $errors], 400);
             }
 
-            exit();
-            $payer = $this->userRepository->Get($request->payerid);
-            
-            if((int)$payer->balance < $request->value) {
-                return response()->json(['erro' => 'O usuário não tem saldo suficiente'], 404);
-            }
-    
-            if($payer->usertype === 'lojista') {
-                return response()->json(['erro' => 'Lojistas não podem fazer a transação.'], 404);
-             }
-             
              $autorizationResponse = $this->authorizationService->Authorize();
 
             if($autorizationResponse->failed()){ 

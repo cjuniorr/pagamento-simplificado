@@ -24,7 +24,6 @@ class UserRepository implements IUserRepository {
             DB::rollBack();
             throw new Exception("Ocorreu um erro durante a inserção do novo usuário.", $e);
         }
-
     }
 
     public function GetAll(){

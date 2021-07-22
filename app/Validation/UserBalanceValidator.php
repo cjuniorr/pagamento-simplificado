@@ -25,4 +25,8 @@ class UserBalanceValidator extends Validator {
 
         return parent::handle($request);
     }
+
+    public function Validate(){
+        
+    }
 }
