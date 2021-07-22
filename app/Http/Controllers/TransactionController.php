@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Transaction;
-use App\Models\TransactionValidator;
 use App\Repositories\ITransactionRepository;
 use App\Repositories\IUserRepository;
 use App\Services\IAuthorizationService;
